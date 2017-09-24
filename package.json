@@ -1,0 +1,7 @@
+{
+  "name": "test-rethinkdb",
+  "main": "index.js",
+  "dependencies": {
+    "rethinkdb": "2.3.3"
+  }
+}
