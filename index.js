@@ -10,6 +10,7 @@ r.connect()
   .then(createTable)
   .then(write)
   .then(read)
+  .then(filters)
   .catch(console.error)
   .then(() => {
     console.log('closing connection');
@@ -39,5 +40,24 @@ function read() {
   console.log('=== read ===');
   return r.table('test').run(connection)
     .then(e => e.toArray())   // call toArray on cursor result to get all the data
+    .then(console.log)
+}
+
+function filters() {
+  console.log('=== filters ===');
+  // basic filtering on exact values
+  return r.table('test')
+    .filter({ a: 10 })
+    .run(connection)
+    .then(e => e.toArray())
+    .then(console.log)
+
+  // filtering based on row command
+    .then(() => {
+      return r.table('test')
+        .filter(r.row('b').eq(30))
+        .run(connection)
+    })
+    .then(e => e.toArray())
     .then(console.log)
 }
