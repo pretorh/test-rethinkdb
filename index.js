@@ -167,4 +167,16 @@ function updates() {
         .then(() => r.table('test').get(1).run(connection))
         .then(console.log);
     })
+
+    .then(() => {
+      console.log('update 1st element in array c to 200, change 2nd via append/delete');
+      return r.table('test')
+        .get(1)
+        .update({
+          c: r.row('c').append(3).changeAt(0, 200).deleteAt(1)
+        })
+        .run(connection)
+        .then(() => r.table('test').get(1).run(connection))
+        .then(console.log);
+    })
 }
