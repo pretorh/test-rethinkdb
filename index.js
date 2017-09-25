@@ -21,8 +21,14 @@ r.connect()
 
 function createTable() {
   console.log('=== create table ===');
-  return r.tableDrop('test').run(connection)
-    .catch(/* ignore */)
+  return r.tableList()
+    .run(connection)
+    .then(e => {
+      if (e.indexOf('test') !== -1) {
+        console.log('dropping old table');
+        return r.tableDrop('test').run(connection)
+      }
+    })
     .then(() => {
       return r.tableCreate('test').run(connection)
         .then(console.log)
