@@ -13,4 +13,5 @@ A basic project to do insert, selection using [rethinkdb](https://rethinkdb.com/
 
 - [javascript api](https://rethinkdb.com/api/javascript/)
 - [filter api](https://rethinkdb.com/api/javascript/filter/)
+- [update api](https://rethinkdb.com/api/javascript/update/)
 - [Ten minute guide](https://rethinkdb.com/docs/guide/javascript/)

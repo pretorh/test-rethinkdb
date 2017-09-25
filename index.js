@@ -12,6 +12,7 @@ r.connect()
   .then(read)
   .then(filters)
   .then(complex)
+  .then(updates)
   .catch(console.error)
   .then(() => {
     console.log('closing connection');
@@ -109,4 +110,61 @@ function complex() {
       .then(e => e.toArray())
       .then(console.log)
   }
+}
+
+function updates() {
+  console.log('=== udpates ===');
+  return r.table('test')
+    .insert({ id: 1, a: 100, b: { nested: 1 }, c: [1] })
+    .run(connection)
+
+    .then(() => {
+      console.log('set a=101');
+      return r.table('test')
+        .get(1)
+        .update({
+          a: 101
+        })
+        .run(connection)
+        .then(() => r.table('test').get(1).run(connection))
+        .then(console.log);
+    })
+
+    .then(() => {
+      console.log('increment a (to 102)');
+      return r.table('test')
+        .get(1)
+        .update({
+          a: r.row('a').add(1)
+        })
+        .run(connection)
+        .then(() => r.table('test').get(1).run(connection))
+        .then(console.log);
+    })
+
+    .then(() => {
+      console.log('update b.nested = a');
+      return r.table('test')
+        .get(1)
+        .update({
+          b: {
+            nested: r.row('a')
+          }
+        })
+        .run(connection)
+        .then(() => r.table('test').get(1).run(connection))
+        .then(console.log);
+    })
+
+    .then(() => {
+      console.log('add element to array c');
+      return r.table('test')
+        .get(1)
+        .update({
+          c: r.row('c').append(2)
+        })
+        .run(connection)
+        .then(() => r.table('test').get(1).run(connection))
+        .then(console.log);
+    })
 }
